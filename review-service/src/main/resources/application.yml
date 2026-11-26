@@ -1,0 +1,20 @@
+server:
+  port: 8083
+  shutdown: graceful
+
+spring:
+  application:
+    name: review-service
+  datasource:
+    url: jdbc:mysql://${DB_HOST:localhost}:3306/reviews_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
+    username: ${DB_USER:gamestore}
+    password: ${DB_PASSWORD:root123}
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
