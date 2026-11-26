@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>NEXUS VAULT | Premium Games Store</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #0d1117; color: #e6edf3; margin: 0; padding: 0; }
+        .navbar { background: #161b22; border-bottom: 1px solid #30363d; padding: 14px 32px; display: flex; justify-content: space-between; align-items: center; }
+        .brand { font-size: 1.4em; font-weight: bold; color: #58a6ff; letter-spacing: 1px; }
+        .user-bar { display: flex; align-items: center; gap: 16px; }
+        .badge { background: #1f6feb; color: #fff; padding: 4px 10px; border-radius: 12px; font-size: 0.85em; }
+        .logout-btn { background: #da3633; color: #fff; border: none; padding: 7px 14px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        .container { padding: 28px 32px; max-width: 1300px; margin: auto; }
+        .filters { display: flex; gap: 10px; margin-bottom: 24px; align-items: center; flex-wrap: wrap; }
+        .filter-btn { padding: 7px 16px; border-radius: 20px; border: 1px solid #30363d; background: #161b22; color: #c9d1d9; text-decoration: none; font-size: 0.9em; }
+        .filter-btn.active { background: #238636; border-color: #2ea043; color: #fff; font-weight: bold; }
+        .promo-hint { margin-left: auto; font-size: 0.85em; color: #8b949e; }
+        .promo-hint code { color: #3fb950; background: #161b22; padding: 3px 7px; border-radius: 4px; border: 1px solid #30363d; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 20px; margin-bottom: 40px; }
+        .card { background: #161b22; border: 1px solid #30363d; border-radius: 10px; overflow: hidden; padding: 16px; display: flex; flex-direction: column; justify-content: space-between; }
+        .card img { width: 100%; height: 155px; object-fit: cover; border-radius: 6px; }
+        .meta { font-size: 0.85em; color: #8b949e; }
+        .desc { font-size: 0.88em; color: #c9d1d9; margin: 8px 0; }
+        .price-row { display: flex; justify-content: space-between; align-items: center; margin: 10px 0; }
+        .price { font-size: 1.3em; font-weight: bold; color: #3fb950; }
+        .rating { color: #e3b341; font-weight: bold; }
+        input[type="text"], select { width: 92%; padding: 8px; margin-bottom: 8px; border-radius: 5px; border: 1px solid #30363d; background: #0d1117; color: #fff; }
+        .buy-btn { width: 100%; padding: 10px; background: #238636; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
+        .buy-btn:hover { background: #2ea043; }
+        .two-col { display: grid; grid-template-columns: 1.4fr 1fr; gap: 24px; }
+        table { width: 100%; border-collapse: collapse; background: #161b22; border-radius: 8px; overflow: hidden; }
+        th, td { padding: 11px; border: 1px solid #30363d; text-align: left; font-size: 0.9em; }
+        th { background: #21262d; }
+        .key-code { font-family: monospace; color: #79c0ff; background: #0d1117; padding: 3px 6px; border-radius: 4px; }
+        .review-card { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 12px; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="brand">NEXUS VAULT <span style="font-size:0.6em; color:#8b949e;">v2.0 MICROSERVICES</span></div>
+        <div class="user-bar">
+            <span>Welcome, <strong th:text="${username}">krishna</strong></span>
+            <span class="badge">4 Services Active</span>
+            <form th:action="@{/logout}" method="post" style="margin:0;">
+                <button type="submit" class="logout-btn">Sign Out</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="filters">
+            <a th:href="@{/(genre='ALL')}" th:classappend="${selectedGenre == 'ALL'} ? 'active'" class="filter-btn">All Titles</a>
+            <a th:href="@{/(genre='RPG')}" th:classappend="${selectedGenre == 'RPG'} ? 'active'" class="filter-btn">RPG</a>
+            <a th:href="@{/(genre='Action')}" th:classappend="${selectedGenre == 'Action'} ? 'active'" class="filter-btn">Action</a>
+            <a th:href="@{/(genre='Shooter')}" th:classappend="${selectedGenre == 'Shooter'} ? 'active'" class="filter-btn">Shooter</a>
+            <a th:href="@{/(genre='Racing')}" th:classappend="${selectedGenre == 'Racing'} ? 'active'" class="filter-btn">Racing</a>
+            <div class="promo-hint">Try Promo Codes: <code>NEXUS20</code> (20% OFF) or <code>GAMER10</code> (10% OFF)</div>
+        </div>
+
+        <div class="grid">
+            <div class="card" th:each="game : ${games}">
+                <div>
+                    <img th:src="${game.imageUrl}" alt="Game Cover">
+                    <h3 th:text="${game.title}" style="margin:10px 0 4px 0;">Game Title</h3>
+                    <div class="meta" th:text="${game.genre} + ' • ' + ${game.platform}">Genre</div>
+                    <p class="desc" th:text="${game.description}">Description</p>
+                </div>
+                <div>
+                    <div class="price-row">
+                        <span class="price" th:text="'$' + ${game.price}">$59.99</span>
+                        <span class="rating" th:text="'★ ' + ${game.rating}">★ 4.9</span>
+                    </div>
+                    <form th:action="@{/buy}" method="post">
+                        <input type="hidden" name="gameId" th:value="${game.id}">
+                        <input type="text" name="promoCode" placeholder="Promo code (optional)">
+                        <button type="submit" class="buy-btn">Buy &amp; Unlock Key</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="two-col">
+            <div>
+                <h2>Your Digital Library &amp; Orders (Order Service :8082)</h2>
+                <table>
+                    <thead>
+                        <tr><th>Game</th><th>Promo</th><th>Paid</th><th>Activation Key</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="order : ${orders}">
+                            <td th:text="${order.gameTitle}">Game</td>
+                            <td th:text="${order.promoApplied}">NONE</td>
+                            <td th:text="'$' + ${order.amountPaid}">$59.99</td>
+                            <td><span class="key-code" th:text="${order.activationKey}">NXV-XXXX-XXXX</span></td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(orders)}">
+                            <td colspan="4" style="text-align:center; color:#8b949e;">No games purchased yet. Grab a title above!</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div>
+                <h2>Community Reviews (Review Service :8083)</h2>
+                <form th:action="@{/review}" method="post" style="background:#161b22; padding:14px; border:1px solid #30363d; border-radius:8px; margin-bottom:14px;">
+                    <select name="gameTitle" required>
+                        <option th:each="g : ${games}" th:value="${g.title}" th:text="${g.title}">Game</option>
+                    </select>
+                    <select name="stars">
+                        <option value="5">★★★★★ (5/5)</option>
+                        <option value="4">★★★★☆ (4/5)</option>
+                        <option value="3">★★★☆☆ (3/5)</option>
+                    </select>
+                    <input type="text" name="comment" placeholder="Write a quick review..." required>
+                    <button type="submit" class="buy-btn" style="background:#1f6feb;">Post Review</button>
+                </form>
+
+                <div class="review-card" th:each="rev : ${reviews}">
+                    <div style="display:flex; justify-content:space-between;">
+                        <strong th:text="${rev.gameTitle}" style="color:#58a6ff;">Game</strong>
+                        <span style="color:#e3b341;" th:text="${rev.stars} + '/5 ★'">5/5 ★</span>
+                    </div>
+                    <p style="margin:6px 0; font-size:0.9em;" th:text="${rev.comment}">Comment</p>
+                    <div class="meta" th:text="'Posted by @' + ${rev.reviewer}">@krishna</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

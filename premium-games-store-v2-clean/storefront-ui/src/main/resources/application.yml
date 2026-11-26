@@ -1,0 +1,21 @@
+server:
+  port: 8080
+  shutdown: graceful
+
+spring:
+  application:
+    name: storefront-ui
+
+services:
+  catalog:
+    url: ${CATALOG_SERVICE_URL:http://localhost:8081}
+  order:
+    url: ${ORDER_SERVICE_URL:http://localhost:8082}
+  review:
+    url: ${REVIEW_SERVICE_URL:http://localhost:8083}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

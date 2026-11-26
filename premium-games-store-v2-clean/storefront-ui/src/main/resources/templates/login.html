@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign In | NEXUS VAULT</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: radial-gradient(circle at top, #161b22, #090c10); color: #e6edf3; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .login-box { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 36px; width: 360px; box-shadow: 0 12px 32px rgba(0,0,0,0.6); }
+        h1 { color: #58a6ff; margin-top: 0; font-size: 1.6em; text-align: center; letter-spacing: 1px; }
+        p.sub { color: #8b949e; text-align: center; font-size: 0.9em; margin-bottom: 24px; }
+        label { display: block; margin-bottom: 6px; font-size: 0.9em; color: #c9d1d9; }
+        input { width: 93%; padding: 10px; margin-bottom: 16px; border-radius: 6px; border: 1px solid #30363d; background: #0d1117; color: #fff; font-size: 1em; }
+        button { width: 100%; padding: 11px; background: #238636; color: white; border: none; border-radius: 6px; font-weight: bold; font-size: 1em; cursor: pointer; }
+        button:hover { background: #2ea043; }
+        .alert-err { background: rgba(248,81,73,0.15); border: 1px solid #f85149; color: #ff7b72; padding: 10px; border-radius: 6px; margin-bottom: 16px; font-size: 0.9em; text-align: center; }
+        .alert-ok { background: rgba(63,185,80,0.15); border: 1px solid #3fb950; color: #56d364; padding: 10px; border-radius: 6px; margin-bottom: 16px; font-size: 0.9em; text-align: center; }
+        .demo-creds { margin-top: 20px; padding-top: 14px; border-top: 1px solid #30363d; font-size: 0.82em; color: #8b949e; }
+        code { background: #0d1117; padding: 2px 6px; border-radius: 4px; color: #79c0ff; }
+    </style>
+</head>
+<body>
+    <div class="login-box">
+        <h1>NEXUS VAULT</h1>
+        <p class="sub">Sign in to access your digital game library</p>
+
+        <div th:if="${param.error}" class="alert-err">Invalid username or password.</div>
+        <div th:if="${param.logout}" class="alert-ok">You have been signed out.</div>
+
+        <form th:action="@{/login}" method="post">
+            <label>Gamer ID</label>
+            <input type="text" name="username" placeholder="krishna" required autofocus>
+
+            <label>Password</label>
+            <input type="password" name="password" placeholder="••••••••" required>
+
+            <button type="submit">Enter Vault</button>
+        </form>
+
+        <div class="demo-creds">
+            <strong>Test Accounts:</strong><br>
+            Admin Gamer: <code>krishna</code> / <code>nexus123</code><br>
+            Standard Gamer: <code>gamer</code> / <code>gamer123</code>
+        </div>
+    </div>
+</body>
+</html>

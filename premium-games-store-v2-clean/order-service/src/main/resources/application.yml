@@ -1,0 +1,24 @@
+server:
+  port: 8082
+  shutdown: graceful
+
+spring:
+  application:
+    name: order-service
+  datasource:
+    url: jdbc:mysql://${DB_HOST:localhost}:3306/orders_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
+    username: ${DB_USER:gamestore}
+    password: ${DB_PASSWORD:root123}
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+catalog:
+  service:
+    url: ${CATALOG_SERVICE_URL:http://localhost:8081}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
