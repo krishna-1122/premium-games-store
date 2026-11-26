@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>NEXUS VAULT | Premium Games Store</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #0d1117; color: #e6edf3; margin: 0; padding: 30px; }
+        h1 { color: #58a6ff; letter-spacing: 1px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-bottom: 40px; }
+        .card { background: #161b22; border: 1px solid #30363d; border-radius: 10px; overflow: hidden; padding: 16px; }
+        .card img { width: 100%; height: 150px; object-fit: cover; border-radius: 6px; }
+        .price { font-size: 1.3em; font-weight: bold; color: #3fb950; margin: 10px 0; }
+        input[type="email"] { width: 92%; padding: 8px; margin-bottom: 8px; border-radius: 5px; border: 1px solid #30363d; background: #0d1117; color: #fff; }
+        button { width: 100%; padding: 10px; background: #238636; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
+        button:hover { background: #2ea043; }
+        table { width: 100%; border-collapse: collapse; background: #161b22; }
+        th, td { padding: 12px; border: 1px solid #30363d; text-align: left; }
+        th { background: #21262d; }
+    </style>
+</head>
+<body>
+    <h1>NEXUS VAULT — Premium Games Store</h1>
+    <p>Microservices Architecture: Storefront UI (8080) &rarr; Catalog Service (8081) &amp; Order Service (8082) &rarr; MySQL (3306)</p>
+
+    <h2>Featured AAA Titles</h2>
+    <div class="grid">
+        <div class="card" th:each="game : ${games}">
+            <img th:src="${game.imageUrl}" alt="Game Cover">
+            <h3 th:text="${game.title}">Game Title</h3>
+            <p th:text="${game.genre} + ' | ' + ${game.platform}">Genre</p>
+            <div class="price" th:text="'$' + ${game.price}">$59.99</div>
+            <form action="/buy" method="post">
+                <input type="hidden" name="gameId" th:value="${game.id}">
+                <input type="email" name="customerEmail" placeholder="Enter gamer email" required>
+                <button type="submit">Buy Instant Key</button>
+            </form>
+        </div>
+    </div>
+
+    <h2>Recent Orders (Live from Order Microservice)</h2>
+    <table>
+        <thead>
+            <tr><th>Order ID</th><th>Game Title</th><th>Customer Email</th><th>Paid</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+            <tr th:each="order : ${orders}">
+                <td th:text="${order.id}">1</td>
+                <td th:text="${order.gameTitle}">Game</td>
+                <td th:text="${order.customerEmail}">user@example.com</td>
+                <td th:text="'$' + ${order.amountPaid}">$59.99</td>
+                <td th:text="${order.status}">COMPLETED</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
